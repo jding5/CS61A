@@ -18,6 +18,7 @@ https://inst.eecs.berkeley.edu/~cs61a/su20/proj/cats/
 ### Ants Description:
 In this project, students will individually or with a group create a tower defense game called Ants Vs. SomeBees. This game is inspired by PopCap Games' Plants Vs. Zombies.
 This project combines functional and object-oriented programming paradigms. The project also involves understanding, extending, and testing a large program.
+
 https://inst.eecs.berkeley.edu/~cs61a/su20/proj/ants/
 
 ### Scheme Description:
