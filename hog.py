@@ -1,3 +1,4 @@
+
 """CS 61A Presents The Game of Hog."""
 
 from dice import six_sided, four_sided, make_test_dice
@@ -21,17 +22,20 @@ def roll_dice(num_rolls, dice=six_sided):
     assert type(num_rolls) == int, 'num_rolls must be an integer.'
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
-    total = 0
-    k = 0 # must roll at least once!
-    while k < num_rolls:
-        current_score = dice()
-        if current_score == 1:
-            total = 1
-        elif total != 1:
-            total = total + current_score
-        k = k + 1
-    return total
+    sum_sum = 0               ## start at 0
+    outcome = False         ## Suppose first outcome is not True(die roll outcome is not one at first time)
+    while num_rolls > 0:  ##simulate the rolling dice exactly num_rolls > 0 times
+        roll = dice()                   
+        if roll == 1:            ##if we die 1 roll, return 1 
+            outcome = True                ## Making outcome become true then write a new if to let it return 1
+        sum_sum = sum_sum + roll           ## else we know when first roll is not 1, then do sum = sum + roll  eg. we die 2 roll, first is 4, and second is 5.
+        num_rolls -= 1                     ##for get the sum to let the while loop stop, we need to let num_rolls = 0, so 2-1=1, then 1-1 = 0, so we type num_rolls -= 1
+    if outcome == True:
+        return 1
+    else:
+        return sum_sum
     # END PROBLEM 1
+
 
 
 def free_bacon(score):
@@ -40,13 +44,8 @@ def free_bacon(score):
     score:  The opponent's current score.
     """
     assert score < 100, 'The game should be over.'
-    #The opponent has a score of 80, and the current player rolls 
-    # zero dice. The current player will receive 10 - 0 + 8 = 18 points.
     # BEGIN PROBLEM 2
-    tenth = score // 10
-    single = score % 10
-    new_score = 10 - single + tenth
-    return new_score
+    return 10 - score % 10 + score // 10
     # END PROBLEM 2
 
 
@@ -66,8 +65,8 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     # BEGIN PROBLEM 3
     if num_rolls == 0:
         return free_bacon(opponent_score)
-    else:
-        return roll_dice(num_rolls,dice)
+    if num_rolls != 0:
+        return roll_dice(num_rolls, dice)
     # END PROBLEM 3
 
 
@@ -75,13 +74,12 @@ def is_swap(player_score, opponent_score):
     """
     Return whether the two scores should be swapped
     """
-    # BEGIN PROBLEM 4
-    tenth = player_score // 10 % 10
-    one = player_score % 10
-    opptenth = opponent_score // 10 % 10
-    oppone = opponent_score % 10
-    
-    if max(one, oppone) - min(one, oppone) == opptenth:
+    # BEGIN PROBLEM 4   
+    find_opp_ten = opponent_score // 10 % 10 ##find the middle digital  
+    last_digital_player = player_score % 10   ##player score's last digital
+    last_digital_opponent = opponent_score % 10   ##opponent score's last digital
+    diff = abs(last_digital_player - last_digital_opponent)
+    if diff == find_opp_ten:
         return True
     else:
         return False
@@ -104,6 +102,11 @@ def silence(score0, score1):
     return silence
 
 
+##Hint:
+## take_turn(num_rolls, opponent_score, dice=six_sided)
+## only call take_turn once per turn
+## special rule except feral hogs
+## use other function
 def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
          goal=GOAL_SCORE, say=silence, feral_hogs=True):
     """Simulate a game and return the final scores of both players, with Player
@@ -124,38 +127,38 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     """
     who = 0  # Who is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
-
-    roll_s0 = 0
-    roll_s1 = 0
-
-    while score0 < goal and score1 < goal: 
-
-        if who == 0:
-            sum_rolls = strategy0(score0, score1)
-            strat0 = take_turn(sum_rolls, score1, dice)
-            score0 = score0 + strat0
-            if feral_hogs and abs(roll_s0 - sum_rolls) == 2: # away 2.
-                score0 = score0 + 3
-            roll_s0 =  strat0
-            if is_swap(score0, score1):
-                score0, score1 = score1, score0
-
-        else:
-            sum_rolls = strategy1(score1, score0)
-            strat1 = take_turn(sum_rolls, score0, dice)
-            score1 += strat1
-            if feral_hogs and abs(roll_s1 - sum_rolls) == 2:
-                score1 = score1 + 3
-            roll_s1 = strat1  
-            if is_swap(score1, score0):
-                score1, score0 = score0, score1     
+    store0 = 0
+    store1 = 0
+    while score0 < goal and score1 < goal: ##function play stop when either one of the player's score is equal to or more than the goal
+        if who == 0:                ## player 0
+            num_rolls_turn = strategy0(score0, score1)   ## The strategy function return the number of rolls the player will roll on that turn, not the points(piazza)
+            score_now = take_turn(num_rolls_turn, score1, dice)  #score
+            if feral_hogs:
+                if abs(num_rolls_turn - store0) == 2:      ##Feral Hogs Rule
+                    store0 = score_now ##not resetting the score0 and score1, we update the score by adding the take turn function(piazza) 
+                    score_now += 3    ##if abs difference bewteen num rolls turn and prev score, then get 3 extra points
+                else:
+                    store0 = score_now   ##if abs(num_rolls_turn - store0) != 2, then ignore the 3 extra points
+            score0 +=  score_now     ## score0 final
+            if is_swap(score0, score1): ## make sure is_swap occurs after score update and format(piazza)  checked for both
+                score0, score1 = score1, score0  
+        elif who == 1:              ##player 1
+            num_rolls_turn = strategy1(score1, score0) #number of rolls turn(piazza)
+            score_now_now = take_turn(num_rolls_turn, score0, dice)  ##score
+            if feral_hogs: 
+                if abs(num_rolls_turn - store1) == 2:
+                    store1= score_now_now ## update the score
+                    score_now_now += 3
+                else:                     ##if abs(num_rolls_turn - store1) != 2, then ignore the 3 extra points
+                    store1 = score_now_now   
+            score1 += score_now_now    ##score1 final
+            if is_swap(score1, score0): ## make sure is_swap occurs after score update and format(piazza)
+                score1, score0 = score0, score1  
         who = other(who)
-
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
-   
     # BEGIN PROBLEM 6
-        say = say(score0, score1)
+    "*** YOUR CODE HERE ***"
     # END PROBLEM 6
     return score0, score1
 
