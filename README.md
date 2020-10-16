@@ -7,17 +7,17 @@ CS 61A concentrates on the idea of abstraction, allowing the programmer to think
 ## Course Project
 There are four projects through the eight week of summer session. It's a really interesting course for students to develop logical thinking. The purpose of the course is to learn concepts involved in programming.
 
-## Hog Description:
+### Hog Description:
 In this project, students  individually or with group need to use control statements and higher-order functions together to develop a simulator and multiple strategies for the dice game Hog. 
 
-## Cat Description:
+### Cat Description:
 In this project, students will  individually or with group write a program that measures typing speed. Additionally, students will implement typing autocorrect, which is a feature that attempts to correct the spelling of a word after a user types it. This project is inspired by typeracer.
 
-## Ants Description:
+### Ants Description:
 In this project, students will individually or with a group create a tower defense game called Ants Vs. SomeBees. This game is inspired by PopCap Games' Plants Vs. Zombies.
 This project combines functional and object-oriented programming paradigms. The project also involves understanding, extending, and testing a large program.
 
-## Scheme Description:
+### Scheme Description:
 In this project, students will individually or with group develop an interpreter for a subset of the Scheme language. Also, students will implement some small programs in Scheme. Scheme is a simple but powerful functional language. Students should find that much of what you have learned about Python transfers cleanly to Scheme as well as to other programming languages.
 
 ## Class Summary
