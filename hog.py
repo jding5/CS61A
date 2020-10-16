@@ -6,6 +6,8 @@ from ucb import main, trace, interact
 
 GOAL_SCORE = 100  # The goal of Hog is to score 100 points.
 
+##Working with partner after phase 1
+
 ######################
 # Phase 1: Simulator #
 ######################
