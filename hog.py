@@ -31,7 +31,7 @@ def roll_dice(num_rolls, dice=six_sided):
         if roll == 1:            ##if we die 1 roll, return 1 
             outcome = True                ## Making outcome become true then write a new if to let it return 1
         sum_sum = sum_sum + roll           ## else we know when first roll is not 1, then do sum = sum + roll  eg. we die 2 roll, first is 4, and second is 5.
-        num_rolls -= 1                     ##for get the sum to let the while loop stop, we need to let num_rolls = 0, so 2-1=1, then 1-1 = 0, so we type num_rolls -= 1
+        num_rolls -= 1                     ##get the sum to let the while loop stop, we need to let num_rolls = 0, so 2-1=1, then 1-1 = 0, so we type num_rolls -= 1
     if outcome == True:
         return 1
     else:
